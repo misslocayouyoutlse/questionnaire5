@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            color: #c4ffbb;
+            background-color: #393be6;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #c4ffbb;
+            color: #393be6;
+            border: none;
+            border-radius: 5px;
+        }
+        #question {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        #response {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #f4cf72;
+        }
+        #counter {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>niveau cinquième :</h1>
+    <button onclick="displayQuestion()">Afficher Question</button>
+    <div id="counter">0 / 70</div>
+    <div id="question"></div>
+    <div id="response"></div>
+
+    <script>
+        const questions = [
+            { question: "Quelle est la différence entre une phrase simple et une phrase complexe ?", response: "Une phrase simple contient un seul verbe conjugué, une phrase complexe en contient plusieurs." },
+            { question: "Donne un exemple de proposition subordonnée relative.", response: "Le livre que je lis est passionnant." },
+            { question: "Quel est le passé simple du verbe 'finir' à la 1re personne du singulier ?", response: "Je finis." },
+            { question: "Quelle est la fonction du mot souligné dans la phrase : 'Paul mange une pomme' ? (une pomme)", response: "Complément dʼobjet direct." },
+            { question: "Quel est le synonyme du mot 'courageux' ?", response: "Brave." },
+            { question: "Cite un roman dʼaventure étudié en 5e.", response: "LʼÎle au trésor de Stevenson (exemple)." },
+            { question: "À quel genre littéraire appartient 'Le Cid' de Corneille ?", response: "Théâtre." },
+            { question: "Quel est le féminin du mot 'acteur' ?", response: "Actrice." },
+            { question: "Comment appelle-t-on la répétition dʼun même son consonne dans une phrase ?", response: "Allitération." },
+            { question: "Quelle est la différence entre un récit à la 1re personne et à la 3e personne ?", response: "À la 1re personne, le narrateur est un personnage de lʼhistoire ; à la 3e personne, il est extérieur à lʼhistoire." },
+            { question: "Résous : 3x + 5 = 14.", response: "x = 3." },
+            { question: "Quel est le PGCD de 18 et 24 ?", response: "6." },
+            { question: "Donne la définition dʼun triangle isocèle.", response: "Un triangle ayant deux côtés de même longueur." },
+            { question: "Combien de faces possède un cube ?", response: "6." },
+            { question: "Complète : Lʼaire dʼun rectangle est égale à ...", response: "Longueur × largeur." },
+            { question: "Quel est le résultat de 2x2x2x2 ?", response: "16." },
+            { question: "Quelle est la fraction irréductible de 18/24 ?", response: "3/4." },
+            { question: "Comment sʼappelle un angle de 90° ?", response: "Un angle droit." },
+            { question: "Convertis 2,5 km en mètres.", response: "2 500 mètres." },
+            { question: "Quel est le périmètre dʼun carré de 4 cm de côté ?", response: "16 cm." },
+            { question: "À quel siècle appartient lʼan 1453 ?", response: "XVe siècle." },
+            { question: "Quel événement marque la fin du Moyen Âge en France ?", response: "La prise de Constantinople (1453) ou la fin de la guerre de Cent Ans." },
+            { question: "Qui a été sacré empereur en 800 ?", response: "Charlemagne." },
+            { question: "Cite un roi célèbre de la Renaissance française.", response: "François Ier." },
+            { question: "Quʼest-ce quʼune démocratie ?", response: "Un régime politique où le peuple exerce le pouvoir." },
+            { question: "Quel est le plus grand continent du monde ?", response: "LʼAsie." },
+            { question: "Comment appelle-t-on la ligne imaginaire qui sépare la Terre en deux hémisphères ?", response: "Lʼéquateur." },
+            { question: "Quel est le nom du fleuve qui traverse lʼÉgypte ?", response: "Le Nil." },
+            { question: "Quʼest-ce quʼun citoyen ?", response: "Une personne qui possède des droits et des devoirs dans un pays." },
+            { question: "Quel est le rôle du Parlement en France ?", response: "Voter les lois." },
+            { question: "Quel organe permet la respiration chez lʼhomme ?", response: "Les poumons." },
+            { question: "Comment sʼappelle le passage de lʼeau de lʼétat liquide à lʼétat solide ?", response: "La solidification." },
+            { question: "Quel est le symbole chimique du fer ?", response: "Fe." },
+            { question: "Cite un exemple de matière conductrice dʼélectricité.", response: "Le cuivre." },
+            { question: "Comment sʼappelle la transformation du sucre en énergie dans le corps ?", response: "La respiration cellulaire." },
+            { question: "À quoi sert un moteur électrique ?", response: "Convertir l’énergie électrique en énergie mécanique." },
+            { question: "Quelle planète est surnommée la 'planète rouge' ?", response: "Mars." },
+            { question: "Donne un exemple de chaîne alimentaire.", response: "Herbe → lapin → renard." },
+            { question: "Quel est le rôle du squelette ?", response: "Soutenir et protéger le corps." },
+            { question: "Comment sʼappelle le passage de lʼétat solide à lʼétat gazeux ?", response: "La sublimation." },
+            { question: "Comment dit-on 'maison' en anglais ?", response: "House." },
+            { question: "Traduis 'I have two brothers.'", response: "Jʼai deux frères." },
+            { question: "Quel est le prétérit du verbe 'to go' ?", response: "Went." },
+            { question: "Donne un exemple de question commençant par 'Where'.", response: "Where do you live?" },
+            { question: "Comment dit-on 'je suis fatigué' en anglais ?", response: "I am tired." },
+            { question: "Comment dit-on « Bonjour » en espagnol ?", response: "Hola" },
+            { question: "Quel est le bon pronom sujet pour « nous » en espagnol ?", response: "Nosotros" },
+            { question: "Quel jour de la semaine est « miércoles » ?", response: "Mercredi" },
+            { question: "Comment dit-on « J’aime le chocolat » en espagnol ?", response: "Me gusta el chocolate" },
+            { question: "Comment dit-on « Merci » en italien ?", response: "Grazie" },
+            { question: "Quelle est la couleur complémentaire du bleu ?", response: "Orange" },
+            { question: "Comment s’appelle la partie d’une chanson qui revient plusieurs fois et que tout le monde chante ?", response: "Refrain" },
+            { question: "Quel instrument de musique possède des touches blanches et noires ?", response: "Piano" },
+            { question: "Comment appelle-t-on un tableau composé d’objets inanimés ?", response: "Nature morte" },
+            { question: "Comment s’appelle la personne qui dirige un orchestre ?", response: "Chef d’orchestre" },
+            { question: "Quel est le nom du héros dans le manga One Piece ?", response: "Monkey D. Luffy" },
+            { question: "Dans quel sport Kylian Mbappé est-il célèbre ?", response: "Le football" },
+            { question: "Comment s'appelle le village où vivent Astérix et Obélix ?", response: "Un village gaulois en Armorique" },
+            { question: "Quel jeu de société utilise un colonel moutarde, un chandelier et une salle de billard ?", response: "Le Cluedo" },
+            { question: "Quel est le nom de l'émission TV où les candidats affrontent des épreuves sur une île avec des totems ?", response: "Koh-Lanta" },
+            { question: "Dans le dessin animé Pokémon, quel est le nom du Pokémon jaune compagnon de Sacha ?", response: "Pikachu" },
+            { question: "Dans quel jeu vidéo construit-on des maisons avec des blocs et affronte-t-on des creepers ?", response: "Minecraft" },
+            { question: "Comment s'appelle la dernière console portable de Nintendo ?", response: "La Nintendo Switch 2" },
+            { question: "Quel est le chanteur français connu pour la chanson 'On verra' ?", response: "Nekfeu" },
+            { question: "Quel est le plat typique de Toulouse souvent cuisiné avec des haricots blancs et de la saucisse ?", response: "Le cassoulet" },
+            { question: "Quel est le nom du manga où des élèves doivent tuer leur professeur poulpe avant la fin de l’année ?", response: "Assassination Classroom" },
+            { question: "Dans Fort Boyard, quel est le nom du personnage qui parle en énigmes ?", response: "Le Père Fouras" },
+            { question: "Quel personnage de Dragon Ball se transforme en Super Saiyan ?", response: "Son Goku" },
+            { question: "Dans quel jeu vidéo conduit-on des voitures avec des objets comme des peaux de banane ou des carapaces ?", response: "Mario Kart" },
+            { question: "Comment s'appelle le grand parc aéronautique situé près de Toulouse ?", response: "Aéroscopia ou la Cité de l’Espace" },
+            { question: "Quel est le nom du manga où des titans menacent l’humanité ?", response: "L’Attaque des Titans (Shingeki no Kyojin)" },
+            { question: "Dans quel jeu de société faut-il aligner 4 jetons pour gagner ?", response: "Puissance 4" },
+            { question: "Quel est le nom du duo toulousain de rappeurs frères ?", response: "Bigflo & Oli" },
+            { question: "Dans quel dessin animé les personnages principaux s’appellent Marinette et Adrien ?", response: "Miraculous, les aventures de Ladybug et Chat Noir" },
+            { question: "Quel est le club de rugby emblématique de Toulouse ?", response: "Le Stade Toulousain" },
+            { question: "Comment dit-on « chien » en latin ?", response: "Canis" },
+            { question: "Dans quelle ville italienne se trouve le Colisée ?", response: "Roma (Rome)" }
+        ];
+
+        let displayedQuestions = [];
+        let counter = 0;
+
+        function displayQuestion() {
+            if (counter >= 70) {
+                alert("Toutes les questions ont été affichées !");
+                return;
+            }
+
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * questions.length);
+            } while (displayedQuestions.includes(randomIndex));
+
+            displayedQuestions.push(randomIndex);
+            const questionObj = questions[randomIndex];
+
+            document.getElementById("question").textContent = questionObj.question;
+            document.getElementById("response").textContent = "Réponse : " + questionObj.response;
+            counter++;
+            document.getElementById("counter").textContent = counter + " / 70";
+        }
+    </script>
+</body>
+</html>
